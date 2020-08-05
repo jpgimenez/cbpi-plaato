@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 
 from modules import cbpi
 from modules.core.hardware import SensorActive
@@ -23,7 +23,7 @@ plaato_base_url = 'http://plaato.blynk.cc'
 @cbpi.sensor
 class PlaatoSensor(SensorActive):
     pins = []
-    for key in PINS.keys():
+    for key in list(PINS.keys()):
         pins.append(key)
 
     api_key = Property.Text("Api Key", configurable=True)
@@ -58,10 +58,10 @@ class PlaatoSensor(SensorActive):
     def get(self, pin):
         url = "{0}/{1}/get/{2}".format(plaato_base_url, self.api_key, pin)
         try:
-            response = urllib2.urlopen(url)
-        except urllib2.HTTPError, error:
+            response = urllib.request.urlopen(url)
+        except urllib.error.HTTPError as error:
             err = error.read()
-            print err
+            print(err)
         else:
             content = response.read()
             j = json.loads(content)
